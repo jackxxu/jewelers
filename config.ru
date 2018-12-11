@@ -1,2 +1,2 @@
-require './app'
-run App.new
+require './jewelers'
+run Jewelers.new
