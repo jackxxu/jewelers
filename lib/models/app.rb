@@ -1,0 +1,2 @@
+class App < Repo
+end

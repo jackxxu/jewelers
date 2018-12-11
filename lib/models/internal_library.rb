@@ -1,0 +1,2 @@
+class InternalLibrary < Repo
+end
