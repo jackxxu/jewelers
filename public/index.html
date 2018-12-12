@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <link rel="stylesheet" href="/public/css/app.css">
+    <link rel="stylesheet" href="css/app.css">
   </head>
 
   <body>
@@ -14,7 +14,7 @@
       </button>
 
       <div class="container">
-        <img alt="Jewelers" src="public/img/logo.png" style="height:32px;" />
+        <img alt="Jewelers" src="img/logo.png" style="height:32px;" />
         <a class="navbar-brand" href="/">Jewelers (POC)</a>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto"></ul>
@@ -36,20 +36,73 @@
             <div class="card" v-for="repo in repos">
               <div class="card-header" role="tab" :id="'heading' + repo.name">
                 <div class="mb-0">
-                  <a data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + repo.name" aria-expanded="true" :aria-controls="'collapse' + repo.name">
+                  <a :href=repo.gitlab_url target="_blank">
+                    <img src="img/gitlab.png" width="20" height="20">
+                  </a>
+                  <a data-toggle="collapse" data-parent="#accordion"
+                                            :href="'#collapse' + repo.name" aria-expanded="true"
+                                            :aria-controls="'collapse' + repo.name">
                     {{ repo.name }}
-                    <span :class="['badge', {'badge-success': repo.passed, 'badge-danger': !repo.passed}]"> {{ repo.passed ? 'Success' : 'Failure' }}</span>
+                    <span :class="['badge', {'badge-success': repo.passed, 'badge-danger': !repo.passed}]">
+                      {{ repo.passed ? 'Passed' : 'Failed' }}
+                    </span>
                   </a>
                 </div>
               </div>
               <div :id="'collapse' + repo.name" class="collapse" role="tabpanel" :aria-labelledby="'heading' + repo.name">
                 <div class="card-block">
-                  <ul class="list-group">
-                    <li :class="['list-group-item', {'list-group-item-success': lib.sanctioned, 'list-group-item-danger': !lib.sanctioned}]"
-                        v-for="lib in repo.libraries">
-                      {{lib.name}}
-                    </li>
-                  </ul>
+                  <div :id="'accordion' + repo.name" role="tablist" aria-multiselectable="true">
+                    <div class="card" v-for="lib in repo.libraries">
+                      <div :class="[{'sanctioned': lib.sanctioned, 'unsanctioned': !lib.sanctioned}, 'card-header']" role="tab" :id="'heading' + repo.name + lib.name">
+                        <div class="mb-0">
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-4">
+                                  <a data-toggle="collapse" :data-parent="'#accordion' + repo.name + lib.name"
+                                  :href="'#collapse' + repo.name + lib.name" aria-expanded="true"
+                                  :aria-controls="'collapse' + repo.name + lib.name">
+                                    {{ lib.name }}
+                                  </a>
+                              </div>
+                              <div class="col-4">{{lib.license}}</div>
+                              <div class="col-4">
+                                  {{lib.star_count}} Github Stars
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div :id="'collapse' + repo.name + lib.name" class="collapse" role="tabpanel"
+                           :aria-labelledby="'heading' + repo.name + lib.name">
+                        <div class="card-block">
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-2">Description</div>
+                              <div class="col-10">{{lib.description}}</div>
+                            </div>
+                            <div class="row">
+                              <div class="col-2"><label class="col-form-label">Authors</label></div>
+                              <div class="col-2">{{lib.authors}}</div>
+                              <div class="col-2">Code Size</div>
+                              <div class="col-2">{{lib.code_size}}</div>
+                              <div class="col-2">Downloads</div>
+                              <div class="col-2">{{lib.downloads}}</div>
+                            </div>
+                            <div class="row">
+                              <div class="col-4">
+                                <a :href=lib.github_url target="_blank">
+                                  <img src="img/github.png" class="rounded">
+                                </a>
+                              </div>
+                              <div class="col-2">Github Watchers</div>
+                              <div class="col-2">{{lib.watcher_count}}</div>
+                              <div class="col-2">Last Commit</div>
+                              <div class="col-2">{{lib.last_commit_dt | formatDate }}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -67,9 +120,17 @@
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/moment@2.22.2/moment.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vue@2.2.5/dist/vue.js" type="text/javascript"></script>
     <script type="text/javascript">
+
+      Vue.filter('formatDate', function(value) {
+        if (value) {
+          return moment(String(value)).format('MM/DD/YYYY');
+        }
+      });
+
       var jewelers = new Vue({
         el: '#jewelers',
         data: {

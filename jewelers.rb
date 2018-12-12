@@ -13,9 +13,6 @@ require './lib/models/internal_library'
 require './lib/models/use'
 require './lib/models/sanctioned_library'
 
-
-binding.pry
-
 class Jewelers < Sinatra::Base
   set :public_folder, 'public'
   register Sinatra::Namespace

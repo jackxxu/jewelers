@@ -1,4 +1,4 @@
 
 # Ignore application configuration
 /config/application.yml
-db/.DS_Store
+.DS_Store
