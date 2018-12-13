@@ -22,7 +22,7 @@ class Github
   end
 
   def license
-    @result.dig[:license][:name] rescue nil
+    @result[:license][:name] rescue nil
   end
 
   def watcher_count

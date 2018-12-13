@@ -35,9 +35,19 @@ Dotenv.load('jewelers.env')
 db_config       = YAML::load(File.open('config/database.yml'))
 ActiveRecord::Base.establish_connection(db_config)
 
+Use.delete_all
+Repo.delete_all
+Library.delete_all
+
 gitlab = Gitlab.new(ENV['gitlab_url'], ENV['gitlab_token'])
 rubygems = RubyGems.new
 Github.api_token = ENV['github_token']
+
+def repo_type(gitlab, repo)
+  return 'App' if gitlab.has_gemfilelock?(repo.gitlab_url)
+  return 'InternalLibrary' if gitlab.has_gemfile?(repo.gitlab_url)
+  return nil
+end
 
 gitlab_repos = gitlab.repos('realtime-pts')
 repo_names = gitlab_repos.map { |x| x[:name] }
@@ -46,10 +56,10 @@ sanctioned_list = SanctionedLibrary.all.map(&:name)
 
 gitlab_repos.each do |repo_hash|
   repo = Repo.
-    find_or_initialize_by(gitlab_id: repo_hash[:id]) do |r|
+    find_or_create_by(gitlab_id: repo_hash[:id]) do |r|
       r.gitlab_url = repo_hash[:web_url]
       r.name = repo_hash[:name]
-      r.type = repo_type(r)
+      r.type = repo_type(gitlab, r)
   end
 
   repo.libraries = []
@@ -60,7 +70,7 @@ gitlab_repos.each do |repo_hash|
                       repo_names.include?(x.gsub('_', '-')) ||
                       x == 'hashtran' } # gems
         .each do |name|
-          gem = Library.find_or_initialize_by(name: name) do |lib|
+          gem = Library.find_or_create_by(name: name) do |lib|
             rubygems_hash = rubygems.get(name)
             lib.github_url = github_url(rubygems_hash) || CUSTOM_URLS[name]
             lib.authors = rubygems_hash[:authors]
@@ -72,6 +82,7 @@ gitlab_repos.each do |repo_hash|
               lib.star_count = github_repo.star_count
               lib.last_commit_dt = github_repo.last_commit_dt
               lib.license = github_repo.license
+              puts lib.license
               lib.watcher_count = github_repo.watcher_count
               lib.code_size = github_repo.code_size
             end

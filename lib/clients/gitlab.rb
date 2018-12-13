@@ -29,4 +29,23 @@ class Gitlab
   rescue RestClient::NotFound
     []
   end
+
+  def has_gemfilelock?(repo_url)
+    url = "#{repo_url}/raw/master/Gemfile.lock"
+    file_exists?(url)
+  end
+
+  def has_gemfile?(repo_url)
+    url = "#{repo_url}/raw/master/Gemfile"
+    file_exists?(url)
+  end
+
+  private
+    def file_exists?(url)
+      RestClient.get url, 'PRIVATE-TOKEN' => @token
+      true
+    rescue RestClient::ExceptionWithResponse => err
+      false
+    end
+
 end
