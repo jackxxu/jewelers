@@ -43,6 +43,10 @@ class Jewelers < Sinatra::Base
     end
   end
 
+  get '/health_check' do
+    'I am healthy'
+  end
+
   get "/" do
     redirect '/index.html'
   end
