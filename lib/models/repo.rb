@@ -7,17 +7,4 @@ class Repo < ActiveRecord::Base
   #                  .map {|k, _| k}
   # end
 
-  def gemfile_url
-    file_url('Gemfile')
-  end
-
-  def gemfilelock_url
-    file_url('Gemfile.lock')
-  end
-
-  private
-
-  def file_url(file)
-    "#{gitlab_url}/raw/master/#{file}"
-  end
 end
