@@ -39,9 +39,9 @@ Use.delete_all
 Repo.delete_all
 Library.delete_all
 
-gitlab = Gitlab.new(ENV['gitlab_url'], ENV['gitlab_token'])
+gitlab = Gitlab.new(ENV['GITLAB_URL'], ENV['GITLAB_TOKEN'])
 rubygems = RubyGems.new
-Github.api_token = ENV['github_token']
+Github.api_token = ENV['GITHUB_TOKEN']
 
 def repo_type(gitlab, repo)
   return 'App' if gitlab.has_gemfilelock?(repo.gitlab_url)
@@ -51,7 +51,7 @@ end
 
 gitlab_repos = gitlab.repos('realtime-pts')
 repo_names = gitlab_repos.map { |x| x[:name] }
-sanctioned_list = gitlab.sanctioned_gems(ENV['sanctioned_gems_path'])
+sanctioned_list = gitlab.sanctioned_gems(ENV['SANCTIONED_GEM_PATH'])
 
 gitlab_repos.each do |repo_hash|
   repo = Repo.
