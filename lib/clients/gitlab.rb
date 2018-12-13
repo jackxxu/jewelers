@@ -1,5 +1,6 @@
 require 'rest-client'
 require 'gemnasium/parser'
+require 'yaml'
 
 class Gitlab
   def initialize(url, token)
@@ -38,6 +39,11 @@ class Gitlab
   def has_gemfile?(repo_url)
     url = "#{repo_url}/raw/master/Gemfile"
     file_exists?(url)
+  end
+
+  def sanctioned_gems(gems_yml_path)
+    resp = RestClient.get "#{@url}/#{gems_yml_path}", 'PRIVATE-TOKEN' => @token
+    YAML.load(resp.body).keys
   end
 
   private

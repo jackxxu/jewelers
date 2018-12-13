@@ -51,8 +51,7 @@ end
 
 gitlab_repos = gitlab.repos('realtime-pts')
 repo_names = gitlab_repos.map { |x| x[:name] }
-
-sanctioned_list = SanctionedLibrary.all.map(&:name)
+sanctioned_list = gitlab.sanctioned_gems(ENV['sanctioned_gems_path'])
 
 gitlab_repos.each do |repo_hash|
   repo = Repo.
