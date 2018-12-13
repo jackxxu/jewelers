@@ -2,3 +2,4 @@
 # Ignore application configuration
 .DS_Store
 *.env
+*.sqlite3

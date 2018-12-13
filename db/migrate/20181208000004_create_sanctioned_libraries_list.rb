@@ -1,4 +1,4 @@
-require './models/sanctioned_library'
+require './lib/models/sanctioned_library'
 
 class CreateSanctionedLibrariesList < ActiveRecord::Migration[5.2]
   def change
