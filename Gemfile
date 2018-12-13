@@ -12,4 +12,4 @@ gem 'sqlite3'
 gem 'rake'
 gem 'octokit'
 gem 'dotenv'
-
+gem 'rufus-scheduler'

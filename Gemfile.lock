@@ -22,8 +22,13 @@ GEM
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.5.0)
+    et-orbi (1.1.6)
+      tzinfo
     faraday (0.15.4)
       multipart-post (>= 1.2, < 3)
+    fugit (1.1.6)
+      et-orbi (~> 1.1, >= 1.1.6)
+      raabro (~> 1.1)
     gemnasium-parser (0.1.9)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -47,6 +52,7 @@ GEM
       byebug (~> 10.0)
       pry (~> 0.10)
     public_suffix (3.0.3)
+    raabro (1.1.6)
     rack (2.0.6)
     rack-protection (2.0.4)
       rack
@@ -55,6 +61,8 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    rufus-scheduler (3.5.2)
+      fugit (~> 1.1, >= 1.1.5)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
@@ -94,6 +102,7 @@ DEPENDENCIES
   pry-byebug
   rake
   rest-client
+  rufus-scheduler
   sinatra
   sinatra-namespace
   sqlite3

@@ -22,6 +22,14 @@ class Jewelers < Sinatra::Base
       content_type 'application/json'
     end
 
+    get '/repos/:repo' do
+      {
+        passed: Repo.find_by_name(params[:repo])
+                    .libraries
+                    .all?(&:sanctioned)
+      }.to_json
+    end
+
     get '/repos' do
       App.includes(:libraries).all.map { |app|
         {
