@@ -137,7 +137,7 @@
           repos: []
         },
         created: function() {
-          axios.get('/api/v1/repos')
+          axios.get('./api/v1/repos')
                .then(function (res) {
                  console.log(res.body)
                  jewelers.repos = res.data;
