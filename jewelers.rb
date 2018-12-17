@@ -15,8 +15,10 @@ require './lib/models/sanctioned_library'
 
 class Jewelers < Sinatra::Base
   set :public_folder, 'public'
+  set :logging, true
+  set :server, :puma
+  set :show_exceptions, true
   register Sinatra::Namespace
-  configure { set :server, :puma }
 
   namespace '/api/v1' do
     before do
