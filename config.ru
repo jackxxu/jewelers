@@ -1,8 +1,13 @@
 require 'rufus-scheduler'
-Rufus::Scheduler.new.cron '5 0 * * *' do # runs 5 mins after midnight
+scheduler = Rufus::Scheduler.new
+
+scheduler.cron '5 0 * * *' do # runs 5 mins after midnight
   require './lib/harvester'
 end
-require './lib/harvester'
+
+scheduler.in '1s' do
+  require './lib/harvester'
+end
 
 require './jewelers'
 run Jewelers.new
